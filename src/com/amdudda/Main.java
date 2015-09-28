@@ -1,9 +1,6 @@
 package com.amdudda;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -28,12 +25,36 @@ public class Main {
         // DONE: get data about quantities sold
         salesData(productInfo);
 
-        // debugging
+        /* debugging
         for (String key : productInfo.keySet()) {
             System.out.println(key + ": cost = $" + productInfo.get(key).get(0)
                     + " sale = $" + productInfo.get(key).get(1) + " units = "
                     + productInfo.get(key).get(2));
         }
+        */
+
+        // TODO: Generate sales report
+        createReport(productInfo);
+
+    }
+
+    private static void createReport(HashMap<String, ArrayList<Double>> p_info) throws IOException {
+        // takes data and generates report, stored as "sales-report.txt"
+        // set up our data streams
+        String fname = "./data/sales-report.txt";
+        File f = new File(fname);
+        FileWriter fw = new FileWriter(f);
+        BufferedWriter bufWrite = new BufferedWriter(fw);
+
+        // TODO: report header
+
+        // TODO: report body
+
+        // TODO: report footer
+
+        // close our data streams
+        bufWrite.close();
+        fw.close();
     }
 
     private static void salesData(HashMap<String, ArrayList<Double>> p_info) {
@@ -59,7 +80,7 @@ public class Main {
                     s = new Scanner(System.in);
                 }  // end try-catch
             } // end while
-            // we need to cast the integer as a Double so we don't break the arraylist.
+            // we need to cast the int as a Double so we don't break the arraylist.
             p_info.get(key).add(Double.parseDouble(""+d));
         }
 
@@ -74,6 +95,7 @@ public class Main {
         FileReader fr = new FileReader(f);
         BufferedReader bufRead = new BufferedReader(fr);
 
+        // TODO: Exception handling for bad data
         // read in the first line of the file
         String line = bufRead.readLine();
         // while there is still data to read, add it to the hashmap
