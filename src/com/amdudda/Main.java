@@ -46,9 +46,12 @@ public class Main {
         FileWriter fw = new FileWriter(f);
         BufferedWriter bufWrite = new BufferedWriter(fw);
 
-        // TODO: report header
+        // DONE: report header
+        String reportHead = "Daily Coffeeshop Sales Report\n\n";
+        bufWrite.write(reportHead);
 
-        // TODO: report body
+        // DONE: report body
+        createReportBody(p_info,bufWrite);
 
         // TODO: report footer
 
@@ -56,6 +59,25 @@ public class Main {
         bufWrite.close();
         fw.close();
     }
+
+    private static void createReportBody(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bw) throws IOException {
+        // generates the body of the daily sales report
+        String cur_line;
+        Double qty_sold, cost_to_make, sale_price;
+        for (String key:p_info.keySet()) {
+            // get our values from the array hidden in the hashmap
+            cost_to_make = p_info.get(key).get(0);
+            sale_price = p_info.get(key).get(1);
+            qty_sold = p_info.get(key).get(2);
+            // use those values to build up a long string storing that product's sales info
+            cur_line = key.substring(0,1).toUpperCase() + key.substring(1);
+            cur_line += String.format(": Sold %.0f, ", qty_sold);
+            cur_line += String.format("Expenses $%.2f, ", qty_sold*cost_to_make);
+            cur_line += String.format("Revenue $%.2f, ", qty_sold*sale_price);
+            cur_line += String.format("Profit $%.2f\n", (qty_sold*sale_price)-(qty_sold*cost_to_make));
+            bw.write(cur_line);
+        }
+    } // end createReportBody
 
     private static void salesData(HashMap<String, ArrayList<Double>> p_info) {
         // gets user input and appends to the array list for each product
