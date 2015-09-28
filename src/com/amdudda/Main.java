@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -28,7 +29,7 @@ public class Main {
         salesData(productInfo);
 
         // debugging
-        for (String key:productInfo.keySet()) {
+        for (String key : productInfo.keySet()) {
             System.out.println(key + ": cost = $" + productInfo.get(key).get(0)
                     + " sale = $" + productInfo.get(key).get(1) + " units = "
                     + productInfo.get(key).get(2));
@@ -39,12 +40,27 @@ public class Main {
         // gets user input and appends to the array list for each product
         // initialize scanner for data input
         Scanner s = new Scanner(System.in);
-        Double d;  // will hold user input
-        for (String key:p_info.keySet()) {
-            System.out.println("How many units of " + key + "were sold today?");
-            d = s.nextDouble();
-            // TODO: error handling & data validation
-            p_info.get(key).add(d);
+        int d;  // will hold user input; set negative so it hits first while loop
+        for (String key : p_info.keySet()) {
+            // DONE: error handling & data validation
+            // need to set d to be negative so it loops once
+            d = -1; // reset d to be negative so it hits first while loop
+            while (d < 0) {
+                try {
+                    System.out.println("How many units of " + key + " were sold today?");
+                    d = s.nextInt();
+                    if (d < 0) System.out.println("You entered a negative number. Please reenter.");
+                } catch (InputMismatchException ime) {
+                    System.out.println("You do not seem to have entered a whole number (no decimals).  Please try again.");
+                    s = new Scanner(System.in);
+                } catch (Exception e) {
+                    System.out.println("Something seems to be wrong with your input.  Please try again.");
+                    System.out.println(e.toString());
+                    s = new Scanner(System.in);
+                }  // end try-catch
+            } // end while
+            // we need to cast the integer as a Double so we don't break the arraylist.
+            p_info.get(key).add(Double.parseDouble(""+d));
         }
 
     }
@@ -67,8 +83,8 @@ public class Main {
             ArrayList<Double> money = new ArrayList<>();
             // decompose the data - notice it's still string data!
             String prod_name = line.substring(0, line.indexOf(";"));
-            String cost_to_make = line.substring(line.indexOf(";")+1, line.lastIndexOf(";"));
-            String sale_price = line.substring(line.lastIndexOf(";")+1);
+            String cost_to_make = line.substring(line.indexOf(";") + 1, line.lastIndexOf(";"));
+            String sale_price = line.substring(line.lastIndexOf(";") + 1);
             // add the cost & sale info to the arraylist - make sure to convert to Double type
             money.add(Double.parseDouble(cost_to_make));
             money.add(Double.parseDouble(sale_price));
