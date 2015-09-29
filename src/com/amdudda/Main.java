@@ -1,10 +1,7 @@
 package com.amdudda;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -33,7 +30,7 @@ public class Main {
         }
         */
 
-        // TODO: Generate sales report
+        // DONE: Generate sales report
         createReport(productInfo);
 
     }
@@ -48,17 +45,43 @@ public class Main {
 
         // DONE: report header
         String reportHead = "Daily Coffeeshop Sales Report\n\n";
+        bufWrite.write("\n==========================================================\n\n");
         bufWrite.write(reportHead);
 
         // DONE: report body
         createReportBody(p_info,bufWrite);
 
-        // TODO: report footer
+        // Done: report footer
+        createReportFooter(p_info,bufWrite);
 
         // close our data streams
         bufWrite.close();
         fw.close();
-    }
+    }  // end createReport
+
+    private static void createReportFooter(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bW) throws IOException {
+        // adds up totals and creates final line of report. summing up expenses and revenue
+        Double qty_sold, cost_to_make, sale_price;
+        Double expenses_total=0d,revenue_total=0d,net_profit;
+        for (String key:p_info.keySet()) {
+            // get our values from the array hidden in the hashmap
+            cost_to_make = p_info.get(key).get(0);
+            sale_price = p_info.get(key).get(1);
+            qty_sold = p_info.get(key).get(2);
+            expenses_total += qty_sold*cost_to_make;
+            revenue_total += qty_sold*sale_price;
+        }
+        // now calculate net profit, which is revenue minus expenses
+        net_profit = revenue_total-expenses_total;
+
+        // concatenate the last line of the report
+        String last_line = String.format("Daily totals:\tExpenses $%.2f, Sales $%.2f, Profit $%.2f",
+                expenses_total, revenue_total, net_profit);
+
+        // and write out the final lines of the report
+        bW.write("\n==========================================================\n\n");
+        bW.write(last_line);
+    }  // end createReportFooter
 
     private static void createReportBody(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bw) throws IOException {
         // generates the body of the daily sales report
@@ -71,7 +94,7 @@ public class Main {
             qty_sold = p_info.get(key).get(2);
             // use those values to build up a long string storing that product's sales info
             cur_line = key.substring(0,1).toUpperCase() + key.substring(1);
-            cur_line += String.format(": Sold %.0f, ", qty_sold);
+            cur_line += String.format(":\tSold %.0f, ", qty_sold);
             cur_line += String.format("Expenses $%.2f, ", qty_sold*cost_to_make);
             cur_line += String.format("Revenue $%.2f, ", qty_sold*sale_price);
             cur_line += String.format("Profit $%.2f\n", (qty_sold*sale_price)-(qty_sold*cost_to_make));
