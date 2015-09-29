@@ -3,7 +3,7 @@ package com.amdudda;
 import java.io.*;
 import java.util.*;
 
-public class Main {
+public class Coffeeshop {
 
     public static void main(String[] args) throws IOException {
         // write your code here
@@ -19,16 +19,11 @@ public class Main {
         HashMap<String, ArrayList<Double>> productInfo = new HashMap<String, ArrayList<Double>>();
         fetchData(productInfo);
 
+        /* TODO: Exception handling for bad data - we want to wrap the program, because we don't
+        want the report to generate if we have bad data in coffee.txt
+         */
         // DONE: get data about quantities sold
         salesData(productInfo);
-
-        /* debugging
-        for (String key : productInfo.keySet()) {
-            System.out.println(key + ": cost = $" + productInfo.get(key).get(0)
-                    + " sale = $" + productInfo.get(key).get(1) + " units = "
-                    + productInfo.get(key).get(2));
-        }
-        */
 
         // DONE: Generate sales report
         createReport(productInfo);
@@ -129,7 +124,7 @@ public class Main {
             p_info.get(key).add(Double.parseDouble(""+d));
         }
 
-    }
+    } // end salesData
 
     private static void fetchData(HashMap<String, ArrayList<Double>> p_info) throws IOException {
         // we want to read in data from coffee.txt,
@@ -140,7 +135,6 @@ public class Main {
         FileReader fr = new FileReader(f);
         BufferedReader bufRead = new BufferedReader(fr);
 
-        // TODO: Exception handling for bad data
         // read in the first line of the file
         String line = bufRead.readLine();
         // while there is still data to read, add it to the hashmap
@@ -164,4 +158,5 @@ public class Main {
         bufRead.close();
         fr.close();
     }  // end fetchData
-}
+
+} // end Coffeeshop
