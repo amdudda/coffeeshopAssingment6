@@ -6,8 +6,6 @@ import java.util.*;
 public class Coffeeshop {
 
     public static void main(String[] args) throws IOException {
-        // write your code here
-        // DONE: read in data from coffee.txt
         /*
         Each product has a unique name, so we can use that
         as a key for a hashmap linking to an arraylist that
@@ -15,20 +13,38 @@ public class Coffeeshop {
         index 0 will be the cost to make
         index 1 will be the price it's sold at
         index 2 will be the quantity sold that day for that product.
+        In a production environment, I'd probably just use a Double[], since the array is a fixed size,
+        but I wanted to practice using ArrayList.
         */
         HashMap<String, ArrayList<Double>> productInfo = new HashMap<String, ArrayList<Double>>();
-        fetchData(productInfo);
 
-        /* TODO: Exception handling for bad data - we want to wrap the program, because we don't
+        /* DONE: Exception handling for bad data - we want to wrap the program, because we don't
         want the report to generate if we have bad data in coffee.txt
          */
-        // DONE: get data about quantities sold
-        salesData(productInfo);
+        try {
+            // DONE: read in data from coffee.txt
+            fetchData(productInfo);
 
-        // DONE: Generate sales report
-        createReport(productInfo);
+            // DONE: get data about quantities sold
+            salesData(productInfo);
 
-    }
+            // DONE: Generate sales report
+            createReport(productInfo);
+        }
+        catch (NumberFormatException nfe) {
+            // the majority of errors not handled by other trapping will be number format problems in coffee.txt
+            System.out.println("The program expects a number and got something else instead.");
+            System.out.println("Check coffee.txt for errors in input or data layout and try running the program again.");
+            System.out.println(nfe.toString());
+        }
+        catch (Exception e) {
+            // Just in case it's a different problem, let's make a useful suggestion to users for the likely
+            // source of the problem.
+            System.out.println("Oops, something went wrong.  It's probably a problem in coffee.txt - look for errors " +
+                    "in the data or layout of the pricing information.  Then try rerunning the program");
+            System.out.println(e.toString());
+        } // end try-catch block
+    } // end main
 
     private static void createReport(HashMap<String, ArrayList<Double>> p_info) throws IOException {
         // takes data and generates report, stored as "sales-report.txt"
@@ -39,8 +55,8 @@ public class Coffeeshop {
         BufferedWriter bufWrite = new BufferedWriter(fw);
 
         // DONE: report header
-        String reportHead = "Daily Coffeeshop Sales Report\n\n";
-        bufWrite.write("\n==========================================================\n\n");
+        String reportHead = "Daily Coffeeshop Sales Report\n\n" +
+                "==========================================================\n\n";
         bufWrite.write(reportHead);
 
         // DONE: report body
@@ -53,6 +69,26 @@ public class Coffeeshop {
         bufWrite.close();
         fw.close();
     }  // end createReport
+
+    private static void createReportBody(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bw) throws IOException {
+        // generates the body of the daily sales report
+        String cur_line;
+        Double qty_sold, cost_to_make, sale_price;
+        for (String key:p_info.keySet()) {
+            // get our values from the array hidden in the hashmap
+            cost_to_make = p_info.get(key).get(0);
+            sale_price = p_info.get(key).get(1);
+            qty_sold = p_info.get(key).get(2);
+            // use those values to build up a long string storing that product's sales info
+            cur_line = key.substring(0,1).toUpperCase() + key.substring(1);
+            cur_line += String.format(" sold:\t%.0f", qty_sold);
+            cur_line += String.format("\tExpenses $%.2f", qty_sold*cost_to_make);
+            cur_line += String.format("\tRevenue $%.2f", qty_sold*sale_price);
+            cur_line += String.format("\tProfit $%.2f\n", (qty_sold*sale_price)-(qty_sold*cost_to_make));
+            // write that sales info to the report.
+            bw.write(cur_line);
+        }
+    } // end createReportBody
 
     private static void createReportFooter(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bW) throws IOException {
         // adds up totals and creates final line of report. summing up expenses and revenue
@@ -70,32 +106,13 @@ public class Coffeeshop {
         net_profit = revenue_total-expenses_total;
 
         // concatenate the last line of the report
-        String last_line = String.format("Daily totals:\tExpenses $%.2f, Sales $%.2f, Profit $%.2f",
+        String last_line = String.format("Daily totals:\tExpenses $%.2f\tSales $%.2f\tProfit $%.2f",
                 expenses_total, revenue_total, net_profit);
 
         // and write out the final lines of the report
         bW.write("\n==========================================================\n\n");
         bW.write(last_line);
     }  // end createReportFooter
-
-    private static void createReportBody(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bw) throws IOException {
-        // generates the body of the daily sales report
-        String cur_line;
-        Double qty_sold, cost_to_make, sale_price;
-        for (String key:p_info.keySet()) {
-            // get our values from the array hidden in the hashmap
-            cost_to_make = p_info.get(key).get(0);
-            sale_price = p_info.get(key).get(1);
-            qty_sold = p_info.get(key).get(2);
-            // use those values to build up a long string storing that product's sales info
-            cur_line = key.substring(0,1).toUpperCase() + key.substring(1);
-            cur_line += String.format(":\tSold %.0f, ", qty_sold);
-            cur_line += String.format("Expenses $%.2f, ", qty_sold*cost_to_make);
-            cur_line += String.format("Revenue $%.2f, ", qty_sold*sale_price);
-            cur_line += String.format("Profit $%.2f\n", (qty_sold*sale_price)-(qty_sold*cost_to_make));
-            bw.write(cur_line);
-        }
-    } // end createReportBody
 
     private static void salesData(HashMap<String, ArrayList<Double>> p_info) {
         // gets user input and appends to the array list for each product
