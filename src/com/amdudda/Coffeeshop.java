@@ -37,11 +37,16 @@ public class Coffeeshop {
             System.out.println("Check coffee.txt for errors in input or data layout and try running the program again.");
             System.out.println(nfe.toString());
         }
+        catch (FileNotFoundException fnfe) {
+            System.out.println("Unable to find coffee.txt in data directory.  Please find a copy of the data and try " +
+                    "re-running the program.");
+            System.out.println(fnfe.toString());
+        }
         catch (Exception e) {
             // Just in case it's a different problem, let's make a useful suggestion to users for the likely
             // source of the problem.
             System.out.println("Oops, something went wrong.  It's probably a problem in coffee.txt - look for errors " +
-                    "in the data or layout of the pricing information.  Then try rerunning the program");
+                    "in the data or layout of the pricing information.  Then try rerunning the program.");
             System.out.println(e.toString());
         } // end try-catch block
     } // end main

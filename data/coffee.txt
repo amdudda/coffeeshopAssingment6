@@ -1,4 +1,4 @@
-cappuccino;1.56;3.50;
+cappuccino;1.56;3.50
 espresso;0.95;1.50
 latte;1.67;3.75
 black tea;0.35;1.79
