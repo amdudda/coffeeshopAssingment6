@@ -5,5 +5,5 @@ package com.amdudda;
  */
 public class Beverage {
     // Object to store beverages sold at the coffeeshop
-    //what??
+
 }
