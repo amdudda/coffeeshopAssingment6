@@ -16,7 +16,7 @@ public class Coffeeshop {
         In a production environment, I'd probably just use a Double[], since the array is a fixed size,
         but I wanted to practice using ArrayList.
         */
-        HashMap<String, ArrayList<Double>> productInfo = new HashMap<String, ArrayList<Double>>();
+        ArrayList<Beverage> productInfo = new ArrayList<Beverage>();
 
         /* DONE: Exception handling for bad data - we want to wrap the program, because we don't
         want the report to generate if we have bad data in coffee.txt
@@ -51,7 +51,7 @@ public class Coffeeshop {
         } // end try-catch block
     } // end main
 
-    private static void createReport(HashMap<String, ArrayList<Double>> p_info) throws IOException {
+    private static void createReport(ArrayList<Beverage> p_info) throws IOException {
         // takes data and generates report, stored as "sales-report.txt"
         // set up our data streams
         String fname = "./data/sales-report.txt";
@@ -75,7 +75,7 @@ public class Coffeeshop {
         fw.close();
     }  // end createReport
 
-    private static void createReportBody(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bw) throws IOException {
+    private static void createReportBody(ArrayList<Beverage> p_info, BufferedWriter bw) throws IOException {
         // generates the body of the daily sales report
         String cur_line;
         Double qty_sold, cost_to_make, sale_price;
@@ -95,7 +95,7 @@ public class Coffeeshop {
         }
     } // end createReportBody
 
-    private static void createReportFooter(HashMap<String, ArrayList<Double>> p_info, BufferedWriter bW) throws IOException {
+    private static void createReportFooter(ArrayList<Beverage> p_info, BufferedWriter bW) throws IOException {
         // adds up totals and creates final line of report. summing up expenses and revenue
         Double qty_sold, cost_to_make, sale_price;
         Double expenses_total=0d,revenue_total=0d,net_profit;
@@ -119,7 +119,7 @@ public class Coffeeshop {
         bW.write(last_line);
     }  // end createReportFooter
 
-    private static void salesData(HashMap<String, ArrayList<Double>> p_info) {
+    private static void salesData(ArrayList<Beverage> p_info) {
         // gets user input and appends to the array list for each product
         // initialize scanner for data input
         Scanner s = new Scanner(System.in);
@@ -148,7 +148,7 @@ public class Coffeeshop {
 
     } // end salesData
 
-    private static void fetchData(HashMap<String, ArrayList<Double>> p_info) throws IOException {
+    private static void fetchData(ArrayList<Beverage> p_info) throws IOException {
         // we want to read in data from coffee.txt,
         // so we'll need to set up data streams for that.
         // doesn't return anything because the hashmap is being passed by reference
