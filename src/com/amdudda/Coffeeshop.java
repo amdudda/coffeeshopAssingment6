@@ -7,14 +7,7 @@ public class Coffeeshop {
 
     public static void main(String[] args) throws IOException {
         /*
-        Each product has a unique name, so we can use that
-        as a key for a hashmap linking to an arraylist that
-        stores the cost to make and sale price of each product
-        index 0 will be the cost to make
-        index 1 will be the price it's sold at
-        index 2 will be the quantity sold that day for that product.
-        In a production environment, I'd probably just use a Double[], since the array is a fixed size,
-        but I wanted to practice using ArrayList.
+        this new version uses a Beverage object to hold the data about a particular beverage.
         */
         ArrayList<Beverage> productInfo = new ArrayList<Beverage>();
 
@@ -87,7 +80,7 @@ public class Coffeeshop {
             qty_sold = bevvy.getQty_sold();
             // use those values to build up a long string storing that product's sales info
             cur_line = bevvy.getName().substring(0,1).toUpperCase() + bevvy.getName().substring(1);
-            cur_line += String.format(" sold:\t%.0f", qty_sold);
+            cur_line += String.format(" sold:\t%d", qty_sold);
             cur_line += String.format("\tExpenses $%.2f", qty_sold*cost_to_make);
             cur_line += String.format("\tRevenue $%.2f", qty_sold*sale_price);
             cur_line += String.format("\tProfit $%.2f\n", (qty_sold*sale_price)-(qty_sold*cost_to_make));
@@ -131,7 +124,7 @@ public class Coffeeshop {
             d = -1; // reset d to be negative so it hits first while loop
             while (d < 0) {
                 try {
-                    System.out.println("How many units of " + bevvy + " were sold today?");
+                    System.out.println("How many units of " + bevvy.getName() + " were sold today?");
                     d = s.nextInt();
                     if (d < 0) System.out.println("You entered a negative number. Please reenter.");
                 } catch (InputMismatchException ime) {
@@ -169,7 +162,8 @@ public class Coffeeshop {
 
             // create a new beverage and populate with data extracted above.
             Beverage drink = new Beverage(prod_name,cost_to_make,sale_price);
-
+            // and add it to the ArrayList of beverages on the menu.
+            p_info.add(drink);
             // move to the next line
             line = bufRead.readLine();
         } // end while loop
