@@ -73,6 +73,8 @@ public class Coffeeshop {
         String cur_line;
         double sale_price, cost_to_make;
         int qty_sold;
+        // DONE: can I sort the drinks alphabetically?
+        sortDrinks(p_info);
         for (Beverage bevvy:p_info) {
             // get our values from the Beverage object
             cost_to_make = bevvy.getCost();
@@ -117,16 +119,14 @@ public class Coffeeshop {
         // gets user input and appends to the array list for each product
         // initialize scanner for data input
         Scanner s = new Scanner(System.in);
-        int d;  // will hold user input; set negative so it hits first while loop
         for (Beverage bevvy : p_info) {
             // DONE: error handling & data validation
             // need to set d to be negative so it loops once
-            d = -1; // reset d to be negative so it hits first while loop
-            while (d < 0) {
+            while (bevvy.getQty_sold() < 0) {
                 try {
                     System.out.println("How many units of " + bevvy.getName() + " were sold today?");
-                    d = s.nextInt();
-                    if (d < 0) System.out.println("You entered a negative number. Please reenter.");
+                    bevvy.setQty_sold(s.nextInt());
+                    if (bevvy.getQty_sold() < 0) System.out.println("You entered a negative number. Please reenter.");
                 } catch (InputMismatchException ime) {
                     System.out.println("You do not seem to have entered a whole number (no decimals).  Please try again.");
                     s = new Scanner(System.in);
@@ -136,8 +136,6 @@ public class Coffeeshop {
                     s = new Scanner(System.in);
                 }  // end try-catch
             } // end while
-            // update the beverage's qty_sold attribute with user's input
-            bevvy.setQty_sold(d);
         } // end for
 
     } // end salesData
@@ -172,5 +170,22 @@ public class Coffeeshop {
         bufRead.close();
         fr.close();
     }  // end fetchData
+
+    private static void sortDrinks(ArrayList<Beverage> drinks) {
+        // let's sort the drinks alphabetically
+        // got insight from http://stackoverflow.com/questions/12986386/sorting-an-array-of-strings-with-java
+        Beverage to_move;
+        for (int i=0; i<drinks.size(); i++) {
+            for (int j=i+1; j<drinks.size();j++) {
+                // if j is alphabetically before i, swap beverages j and i
+                if (drinks.get(i).getName().compareTo(drinks.get(j).getName()) > 0) {
+                    to_move = drinks.get(i);
+                    drinks.set(i,drinks.get(j));
+                    drinks.set(j,to_move);
+                } // end if.
+            } // end for j
+        } // end for i
+
+    } // end sortDrinks
 
 } // end Coffeeshop

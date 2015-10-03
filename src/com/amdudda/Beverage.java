@@ -19,7 +19,7 @@ public class Beverage {
         this.name = bevName;
         this.cost = bevCost;
         this.price = bevPrice;
-        this.qty_sold = 0; // we won't know how many have been sold until user enters info.
+        this.qty_sold = -1; // we won't know how many have been sold until user enters info.  set to -1 to flag "no data"
     }  // end constructor
 
     // a whole bunch of getter and setter methods.
