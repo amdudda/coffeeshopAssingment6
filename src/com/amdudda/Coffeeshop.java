@@ -125,13 +125,13 @@ public class Coffeeshop {
         // initialize scanner for data input
         Scanner s = new Scanner(System.in);
         int d;  // will hold user input; set negative so it hits first while loop
-        for (String key : p_info.keySet()) {
+        for (Beverage bevvy : p_info) {
             // DONE: error handling & data validation
             // need to set d to be negative so it loops once
             d = -1; // reset d to be negative so it hits first while loop
             while (d < 0) {
                 try {
-                    System.out.println("How many units of " + key + " were sold today?");
+                    System.out.println("How many units of " + bevvy + " were sold today?");
                     d = s.nextInt();
                     if (d < 0) System.out.println("You entered a negative number. Please reenter.");
                 } catch (InputMismatchException ime) {
@@ -143,9 +143,9 @@ public class Coffeeshop {
                     s = new Scanner(System.in);
                 }  // end try-catch
             } // end while
-            // we need to cast the int as a Double so we don't break the arraylist.
-            p_info.get(key).add(Double.parseDouble(""+d));
-        }
+            // update the beverage's qty_sold attribute with user's input
+            bevvy.setQty_sold(d);
+        } // end for
 
     } // end salesData
 
