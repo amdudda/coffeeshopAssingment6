@@ -162,17 +162,14 @@ public class Coffeeshop {
         String line = bufRead.readLine();
         // while there is still data to read, add it to the hashmap
         while (line != null) {
-            // index 0 will be the cost to make
-            // index 1 will be the price it's sold at
-            ArrayList<Double> money = new ArrayList<>();
             // decompose the data - notice it's still string data!
             String prod_name = line.substring(0, line.indexOf(";"));
-            String cost_to_make = line.substring(line.indexOf(";") + 1, line.lastIndexOf(";"));
-            String sale_price = line.substring(line.lastIndexOf(";") + 1);
-            // add the cost & sale info to the arraylist - make sure to convert to Double type
-            money.add(Double.parseDouble(cost_to_make));
-            money.add(Double.parseDouble(sale_price));
-            p_info.put(prod_name, money);
+            double cost_to_make = Double.parseDouble(line.substring(line.indexOf(";") + 1, line.lastIndexOf(";")));
+            double sale_price = Double.parseDouble(line.substring(line.lastIndexOf(";") + 1));
+
+            // create a new beverage and populate with data extracted above.
+            Beverage drink = new Beverage(prod_name,cost_to_make,sale_price);
+
             // move to the next line
             line = bufRead.readLine();
         } // end while loop
