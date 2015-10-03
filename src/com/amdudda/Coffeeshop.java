@@ -78,14 +78,15 @@ public class Coffeeshop {
     private static void createReportBody(ArrayList<Beverage> p_info, BufferedWriter bw) throws IOException {
         // generates the body of the daily sales report
         String cur_line;
-        Double qty_sold, cost_to_make, sale_price;
-        for (String key:p_info.keySet()) {
-            // get our values from the array hidden in the hashmap
-            cost_to_make = p_info.get(key).get(0);
-            sale_price = p_info.get(key).get(1);
-            qty_sold = p_info.get(key).get(2);
+        double sale_price, cost_to_make;
+        int qty_sold;
+        for (Beverage bevvy:p_info) {
+            // get our values from the Beverage object
+            cost_to_make = bevvy.getCost();
+            sale_price = bevvy.getPrice();
+            qty_sold = bevvy.getQty_sold();
             // use those values to build up a long string storing that product's sales info
-            cur_line = key.substring(0,1).toUpperCase() + key.substring(1);
+            cur_line = bevvy.getName().substring(0,1).toUpperCase() + bevvy.getName().substring(1);
             cur_line += String.format(" sold:\t%.0f", qty_sold);
             cur_line += String.format("\tExpenses $%.2f", qty_sold*cost_to_make);
             cur_line += String.format("\tRevenue $%.2f", qty_sold*sale_price);
@@ -97,13 +98,13 @@ public class Coffeeshop {
 
     private static void createReportFooter(ArrayList<Beverage> p_info, BufferedWriter bW) throws IOException {
         // adds up totals and creates final line of report. summing up expenses and revenue
-        Double qty_sold, cost_to_make, sale_price;
-        Double expenses_total=0d,revenue_total=0d,net_profit;
-        for (String key:p_info.keySet()) {
-            // get our values from the array hidden in the hashmap
-            cost_to_make = p_info.get(key).get(0);
-            sale_price = p_info.get(key).get(1);
-            qty_sold = p_info.get(key).get(2);
+        double qty_sold, cost_to_make, sale_price;
+        double expenses_total=0d,revenue_total=0d,net_profit;
+        for (Beverage bevvy:p_info) {
+            // get our values from the Beverage object
+            cost_to_make = bevvy.getCost();
+            sale_price = bevvy.getPrice();
+            qty_sold = bevvy.getQty_sold();
             expenses_total += qty_sold*cost_to_make;
             revenue_total += qty_sold*sale_price;
         }
